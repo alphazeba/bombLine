@@ -7,7 +7,6 @@ function listenToSocket(socket){
 		var t_buffer = ds_map_find_value(async_load, "buffer"); 
 	    var receivedData = buffer_read(t_buffer, buffer_string );
 	    
-		show_debug_message("received the message: " + receivedData);
 		return receivedData;
 	}
 	return pointer_null;

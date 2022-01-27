@@ -6,9 +6,8 @@ if( incomingData == pointer_null){
 }
 // otherwise we got a string.
 var env = json_parse(incomingData);
+debugPrintEnvelope(env);
 
-
-if(handleDrop(env)){
-	networkSendString(clientSocket, getPlayerId() );
-}
+if(handleDrop(env)){}
 else if(handlePlayerId(env)){}
+else if(handleUpdate(env)){}

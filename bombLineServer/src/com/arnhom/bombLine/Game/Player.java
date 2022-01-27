@@ -1,8 +1,7 @@
 package com.arnhom.bombLine.Game;
 
-import com.arnhom.bombLine.Game.Data.Updates;
 import com.arnhom.bombLine.Game.Data.fxy;
-import com.arnhom.bombLine.Network.TransferPOJO.PlayerPojo;
+import com.arnhom.bombLine.Network.TransferPOJO.GameObjects.PlayerPojo;
 import com.arnhom.bombLine.Utility.Guid;
 
 public class Player extends GameObject{
@@ -51,7 +50,7 @@ public class Player extends GameObject{
         moveIntent = new fxy(0,0);
         bombIntent = false;
 
-        speed = 1.0f;
+        speed = 0.1f;
         maxBomb = 1;
         blastSize = 3;
         blastTime = 30;
@@ -68,7 +67,8 @@ public class Player extends GameObject{
             bombIntent = false;
 
             if(numBombsActive < maxBomb){
-                // TODO create a bomb;
+                Bomb newBomb = new Bomb(this,this.pos,blastSize,blastTime,fuseTime);
+                storeObject(newBomb);
                 numBombsActive += 1;
             }
         }

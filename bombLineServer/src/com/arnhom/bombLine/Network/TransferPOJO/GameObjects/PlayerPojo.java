@@ -1,4 +1,4 @@
-package com.arnhom.bombLine.Network.TransferPOJO;
+package com.arnhom.bombLine.Network.TransferPOJO.GameObjects;
 
 public class PlayerPojo extends GameObjectPojo {
 

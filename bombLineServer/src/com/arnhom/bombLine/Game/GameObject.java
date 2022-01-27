@@ -1,18 +1,23 @@
 package com.arnhom.bombLine.Game;
 
-import com.arnhom.bombLine.Network.TransferPOJO.GameObjectPojo;
+import com.arnhom.bombLine.Network.TransferPOJO.GameObjects.GameObjectPojo;
 import com.arnhom.bombLine.Utility.Guid;
 
 public abstract class GameObject {
 
+    private World world;
     private String id;
     protected String type;
     protected boolean active;
-    protected boolean removeObject;
+    private boolean removeObject;
 
     public GameObject(){
         id = generateId();
         removeObject = false;
+    }
+
+    public boolean shouldBeRemoved(){
+        return removeObject;
     }
 
     private String generateId(){
@@ -35,6 +40,14 @@ public abstract class GameObject {
 
     public void onDelete() throws Exception {
 
+    }
+
+    public void setObjectCreator(World world){
+        this.world = world;
+    }
+
+    public void storeObject(GameObject obj){
+        world.storeObject(obj);
     }
 
     public void deleteObject(){

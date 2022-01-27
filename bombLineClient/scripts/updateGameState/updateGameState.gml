@@ -6,9 +6,30 @@ function updateGameState(state){
 	// for every item in the state
 	var numObjs = array_length(state.objs);
 	for(var i=0;i<numObjs; i++){
-		var incoming = state.objs[i];
+		var pojo = state.objs[i];
+		var oid = pojo.oid;
+		var gm_obj;
+		if( ds_map_exists( objMap, oid )){
+			gm_obj = ds_map_find_value(objMap, oid );	
+		}
+		else {
+			gm_obj = createObjectFromPojo(pojo);
+			ds_map_add(objMap, oid, gm_obj);
+		}
 		
-		var here = ds_map_find_value(objMap,incoming.oid);
+		updateObjectWithPojo(gm_obj,pojo);
 	}
+	
+	
+	// now handle the dead ids.
+	var numDeadIds = array_length(state.deadIds);
+	
+	for(var i =0; i < numDeadIds; i++){
+		var deadId = state.deadIds[i];
+		var objToDelete = ds_map_find_value(objMap, deadId);
+		ds_map_delete(objMap, deadId);
+		instance_destroy(objToDelete);
+	}
+	
 	
 }

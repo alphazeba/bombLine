@@ -1,18 +1,21 @@
 package com.arnhom.bombLine.Game;
 
-import com.arnhom.bombLine.Network.TransferPOJO.Envelope;
 import com.arnhom.bombLine.Network.TransferPOJO.StatePojo;
 
 import java.util.*;
 
 public class World {
 
-    Map<String, GameObject> objects;
-    Vector<Player> players; // these are also stored in the objects.
+    private Map<String, GameObject> objects;
+    private Vector<Player> players; // these are also stored in the objects.
+
+    private Vector<GameObject> newObjects;
+
 
     public World(){
         objects = new HashMap<>();
         players = new Vector<>();
+        newObjects = new Vector<>();
     }
 
     public StatePojo update() throws Exception {
@@ -30,7 +33,7 @@ public class World {
         for(String key: keys){
             GameObject obj = objects.get(key);
             state.add(obj.getPojo());
-            if(obj.removeObject){
+            if(obj.shouldBeRemoved()){
                 obj.onDelete();
                 deadIds.add(key);
             }
@@ -40,6 +43,12 @@ public class World {
         for(String deadId: deadIds){
             objects.remove(deadId);
         }
+
+        // add in the new objects
+        for(GameObject obj: newObjects){
+            objects.put(obj.getId(), obj);
+        }
+        newObjects = new Vector<>();
 
         return new StatePojo(state,deadIds);
     }
@@ -52,9 +61,18 @@ public class World {
         }
 
         // else we need to create a new player.
+        return createNewPlayer(connectionId);
+    }
+
+    public Player createNewPlayer(String connectionId){
         Player newPlayer = new Player(connectionId);
-        objects.put(newPlayer.getId(),newPlayer);
+        storeObject(newPlayer);
         players.add(newPlayer);
         return newPlayer;
+    }
+
+    public void storeObject(GameObject obj){
+        newObjects.add(obj);
+        obj.setObjectCreator(this);
     }
 }

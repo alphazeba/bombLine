@@ -3,7 +3,7 @@
 function handleUpdate(env){
 	if(env.type == "update"){
 	
-		var state = envelopeOpen(env)
+		var state = envelopeOpen(env);
 		updateGameState(state);
 	
 		return true;

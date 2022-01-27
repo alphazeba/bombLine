@@ -16,4 +16,8 @@ public class fxy {
     public fxy add(fxy other){
         return new fxy(x+other.x, y+ other.y);
     }
+
+    public fxy snap() {
+        return new fxy((float)Math.floor(x), (float)Math.floor(y));
+    }
 }

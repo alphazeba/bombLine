@@ -31,7 +31,7 @@ public class Main {
         Server server = new Server(8080, playerConnectionBuilder);
         server.startListening();
 
-        float fps = 0.5f;
+        float fps = 60;
         int frameTimeMillis = (int)(1000.f/fps);
 
         while(true){

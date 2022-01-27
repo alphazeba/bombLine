@@ -2,11 +2,11 @@
   "isDnD": false,
   "isCompatibility": false,
   "parent": {
-    "name": "request",
-    "path": "folders/Scripts/request.yy",
+    "name": "objectIO",
+    "path": "folders/Scripts/game/objectIO.yy",
   },
   "resourceVersion": "1.0",
-  "name": "drip",
+  "name": "scaleXY",
   "tags": [],
   "resourceType": "GMScript",
 }
