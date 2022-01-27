@@ -21,7 +21,7 @@ public class GameMakerConnectionIO implements ConnectionIO {
 
     @Override
     public void sendEnvelope(Envelope message) {
-        out.println();
+        //out.println();  // wtf was this for?
         out.println(message);
     }
 

@@ -1,5 +1,6 @@
 package com.arnhom.bombLine.Network;
 
+import com.arnhom.bombLine.Network.TransferPOJO.Envelope;
 import com.sun.tools.internal.xjc.ConsoleErrorReporter;
 
 import java.net.*;
@@ -77,6 +78,13 @@ public class Server {
     public void stopListening(){
         System.out.println("received command to stop listening. The thread will exit once the timeout is reached.");
         keepListening = false;
+    }
+
+    public void sendAll(Envelope message){
+        message.cid = "server";
+        for(Connection connection: connections){
+            connection.sendMessage(message);
+        }
     }
 
     public void stopListeningAndWaitForThreadToExit(){

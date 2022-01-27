@@ -29,7 +29,7 @@
     "path": "folders/Objects.yy",
   },
   "resourceVersion": "1.0",
-  "name": "networkingTestController",
+  "name": "networkingController",
   "tags": [],
   "resourceType": "GMObject",
 }

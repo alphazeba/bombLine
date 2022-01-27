@@ -7,7 +7,6 @@ import java.net.*;
 
 public class Connection {
 
-    String connectionId;
     Socket socket;
     ConnectionIO io;
     ConnectionMessageHandler handler;

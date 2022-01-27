@@ -1,16 +1,8 @@
 package com.arnhom.bombLine.Network.TransferPOJO;
 
 import com.google.gson.Gson;
-import com.sun.tools.doclint.Env;
-import sun.tools.java.ClassType;
 
-import java.util.HashMap;
-import java.util.Map;
 import java.util.Objects;
-
-import com.google.gson.Gson;
-
-import static javax.swing.UIManager.put;
 
 public class Envelope {
     static Gson gson = new Gson();
@@ -21,6 +13,13 @@ public class Envelope {
     private String type;
     private String json;
     public String cid; // connection id
+
+    public Envelope(){
+    }
+
+    public Envelope(String messageType){
+        type = messageType;
+    }
 
     public <T> T open(Class<T> classType){
         return gson.fromJson(json,classType);

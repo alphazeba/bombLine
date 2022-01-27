@@ -4,7 +4,6 @@ import com.arnhom.bombLine.Network.Connection;
 import com.arnhom.bombLine.Network.ConnectionBuilder;
 import com.arnhom.bombLine.Network.ConnectionIO;
 import com.arnhom.bombLine.Network.ConnectionMessageHandler;
-import com.arnhom.bombLine.Network.MessageHandler.EchoHandler;
 import com.arnhom.bombLine.Network.MessageHandler.TennisHandler;
 
 import java.io.IOException;
