@@ -1,5 +1,9 @@
 package com.arnhom.bombLine.Game;
 
+import com.arnhom.bombLine.Game.Data.fxy;
+import com.arnhom.bombLine.Game.Data.ixy;
+import com.arnhom.bombLine.Game.WorldAssistance.RangeDoler;
+import com.arnhom.bombLine.Network.TransferPOJO.GameObjects.LevelPojo;
 import com.arnhom.bombLine.Network.TransferPOJO.StatePojo;
 
 import java.util.*;
@@ -11,11 +15,52 @@ public class World {
 
     private Vector<GameObject> newObjects;
 
+    private Level level;
+    private LevelPojo originalLevelData;
+
+    private RangeDoler styles;
 
     public World(){
         objects = new HashMap<>();
         players = new Vector<>();
         newObjects = new Vector<>();
+        originalLevelData = LevelPojo.buildDefault();
+        level = new Level(originalLevelData);
+        styles = new RangeDoler(4);
+    }
+
+    public StatePojo reinitialize(){
+        // send a message killing all of the objects
+        Vector<String> deadIds = new Vector<>( objects.keySet() );
+
+        StatePojo deadState = new StatePojo(new Vector<>(),deadIds,level.getPojo());
+
+        level = new Level(originalLevelData);
+        newObjects = new Vector<>();
+        objects = new HashMap<>();
+        for(Player player: players){
+            player.initialize();
+            objects.put(player.getId(),player);
+            level.placePlayer(player);
+        }
+
+        return deadState;
+    }
+
+    public boolean collisionPlayer(fxy playerPosition){
+        return level.handlePlayerCollision(playerPosition);
+    }
+
+    public boolean fireLevelCollision(ixy firePosition){
+        return level.handleFireCollision(firePosition);
+    }
+
+    public void fireHurtCollision(ixy firePosition){
+        for(Player player: players){
+            if( player.hurtable() && player.getPos().snapToIxy().equals(firePosition)){
+                player.hurt();
+            }
+        }
     }
 
     public StatePojo update() throws Exception {
@@ -38,6 +83,7 @@ public class World {
                 deadIds.add(key);
             }
         }
+        level.afterUpdateCleanup();
 
         // filter out the removed objects.
         for(String deadId: deadIds){
@@ -50,7 +96,7 @@ public class World {
         }
         newObjects = new Vector<>();
 
-        return new StatePojo(state,deadIds);
+        return new StatePojo(state,deadIds,level.getPojo());
     }
 
     public Player requestPlayer(String connectionId){
@@ -59,15 +105,15 @@ public class World {
                 return player;
             }
         }
-
         // else we need to create a new player.
         return createNewPlayer(connectionId);
     }
 
     public Player createNewPlayer(String connectionId){
-        Player newPlayer = new Player(connectionId);
+        Player newPlayer = new Player(connectionId,styles.getNext());
         storeObject(newPlayer);
         players.add(newPlayer);
+        level.placePlayer(newPlayer);
         return newPlayer;
     }
 

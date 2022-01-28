@@ -1,19 +1,30 @@
 package com.arnhom.bombLine.Game;
 
+import com.arnhom.bombLine.Game.Data.fxy;
 import com.arnhom.bombLine.Network.TransferPOJO.GameObjects.GameObjectPojo;
 import com.arnhom.bombLine.Utility.Guid;
 
 public abstract class GameObject {
 
-    private World world;
+    protected World world;
+
     private String id;
+    private boolean removeObject;
+
     protected String type;
     protected boolean active;
-    private boolean removeObject;
+    protected fxy pos;
+
 
     public GameObject(){
         id = generateId();
+        initialize();
+    }
+
+    public void initialize(){
+        pos = new fxy(0,0);
         removeObject = false;
+        active = true;
     }
 
     public boolean shouldBeRemoved(){
@@ -28,12 +39,22 @@ public abstract class GameObject {
         return id;
     }
 
+    public void setPos(fxy pos){
+        this.pos = pos;
+    }
+
+    public fxy getPos(){
+        return pos;
+    }
+
     public abstract void update();
 
     public void fillGameObjectPojo(GameObjectPojo pojo){
         pojo.oid = id;
         pojo.type = type;
         pojo.active = active;
+        pojo.x = pos.x;
+        pojo.y = pos.y;
     }
 
     public abstract Object getPojo();

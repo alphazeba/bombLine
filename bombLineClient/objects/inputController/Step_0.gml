@@ -1,6 +1,10 @@
 /// @description Insert description here
 // You can write your code in this editor
 
+if(networkingController.connectionState != "success"){
+	return;	
+}
+
 var mappingList = [
 	[ ord("S"), "x" ],
 	[ ord("D"), "d" ],
@@ -31,4 +35,11 @@ if(nextMoveIntent != moveIntent or nextBombIntent != bombIntent){
 	moveIntent = nextMoveIntent;
 	bombIntent = nextBombIntent;
 	notifyIntentUpdate(nextMoveIntent, nextBombIntent);
+}
+
+
+if( keyboard_check_pressed(ord("R")) ){
+	with(networkingController){
+		networkSendString(clientSocket, requestResetWorld());
+	}
 }

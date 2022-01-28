@@ -7,7 +7,6 @@ public class Bomb extends GameObject{
 
     private Player owner;
 
-    private fxy pos;
     private fxy velocity;
 
     private int blastSize;
@@ -15,6 +14,7 @@ public class Bomb extends GameObject{
     private int fuseTime;
 
     public Bomb(Player owner,fxy pos,int blastSize, int blastTime, int fuseTime){
+        super();
         type = "bomb";
         this.owner = owner;
 

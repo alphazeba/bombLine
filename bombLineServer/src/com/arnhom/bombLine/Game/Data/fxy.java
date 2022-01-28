@@ -17,7 +17,16 @@ public class fxy {
         return new fxy(x+other.x, y+ other.y);
     }
 
+    public fxy subtract(fxy other){
+        return new fxy(x-other.x, y-other.y);
+    }
+
     public fxy snap() {
         return new fxy((float)Math.floor(x), (float)Math.floor(y));
+    }
+
+    public ixy snapToIxy(){
+        fxy snapped = this.snap();
+        return new ixy((int)snapped.x, (int)snapped.y);
     }
 }

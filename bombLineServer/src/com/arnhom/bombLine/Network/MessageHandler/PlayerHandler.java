@@ -6,6 +6,8 @@ import com.arnhom.bombLine.Network.ConnectionMailer;
 import com.arnhom.bombLine.Network.ConnectionMessageHandler;
 import com.arnhom.bombLine.Network.TransferPOJO.Envelope;
 import com.arnhom.bombLine.Network.TransferPOJO.Intent;
+import com.arnhom.bombLine.Network.TransferPOJO.MessagePojo;
+import com.arnhom.bombLine.Network.TransferPOJO.StatePojo;
 import com.arnhom.bombLine.Utility.Guid;
 
 public class PlayerHandler implements ConnectionMessageHandler {
@@ -23,10 +25,13 @@ public class PlayerHandler implements ConnectionMessageHandler {
     private static final String i_intent = "intent";
     private static final String i_getPlayerId = "getPlayerId";
 
+    private static final String i_resetWorld = "resetWorld";
+
     private static final String i_drip = "drip";
     private static final String o_drop = "drop";
 
     private static final String o_playerId = "playerId";
+    private static final String o_message = "message";
 
 
     public PlayerHandler(World world, ConnectionMailer mailer){
@@ -67,6 +72,18 @@ public class PlayerHandler implements ConnectionMessageHandler {
     private void handleGeneralEvents(Envelope message){
         if(message.is(i_drip)){
             pushMessage(sealEnvelope(o_drop,":)"));
+        }
+        else if(message.is(i_resetWorld)){
+            pushMessage(sealEnvelope(o_message,new MessagePojo("Server","Player " + player.getName() + " has reset the level")));
+            StatePojo deadState = world.reinitialize();
+            pushMessage(sealEnvelope("update", deadState));
+            // TODO pushing the dead state is trying
+            // to set up a way to erase everything and
+            // then start over, but it doesn't really
+            // work.  If you reset while there are
+            // fire on the screen, the fire do not
+            // go away.  Could give fire a max
+            // lifespan.
         }
     }
 

@@ -4,11 +4,7 @@ public class PlayerPojo extends GameObjectPojo {
 
     public String name;
 
-    public float x;
-    public float y;
-
-    public float vx;
-    public float vy;
+    public float vx,vy;
 
     public float speed;
     public int maxBomb;
@@ -16,4 +12,5 @@ public class PlayerPojo extends GameObjectPojo {
     public int blastTime;
     public int fuseTime;
     public boolean canKick;
+    public int style;
 }

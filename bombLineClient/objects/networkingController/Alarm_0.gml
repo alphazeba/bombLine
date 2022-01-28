@@ -4,7 +4,12 @@
 alarm[0] = pingPeriod;
 
 if(connectionState == "getConnectionId"){
-	if(getConnectionID() != global.null_connection){
+	attempts++;
+	if(attempts > 5){
+		connectionState = "enterConnectionInfo";
+		alarm[0] =1;
+	}	
+	else if(getConnectionID() != global.null_connection){
 		connectionState = "getPlayerId";
 		alarm[0] = 1;
 	}

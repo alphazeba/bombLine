@@ -6,10 +6,10 @@ import com.arnhom.bombLine.Utility.Guid;
 
 public class Player extends GameObject{
     private String name;
+    private int style;
 
     private String connectionId;
 
-    private fxy pos;
     private fxy velocity;
 
     private fxy moveIntent;
@@ -24,9 +24,11 @@ public class Player extends GameObject{
 
     private int numBombsActive;
 
-    public Player(String connectionId){
+    public Player(String connectionId, int style){
+        super();
         name = generateDefaultName();
         type = "player";
+        this.style = style;
         this.connectionId = connectionId;
         initialize();
     }
@@ -43,8 +45,8 @@ public class Player extends GameObject{
         bombIntent = true;
     }
 
-    private void initialize(){
-        pos = new fxy(0,0);
+    public void initialize(){
+        super.initialize();
         velocity = new fxy(0,0);
 
         moveIntent = new fxy(0,0);
@@ -52,7 +54,7 @@ public class Player extends GameObject{
 
         speed = 0.1f;
         maxBomb = 1;
-        blastSize = 3;
+        blastSize = 2;
         blastTime = 30;
         fuseTime = 2*60;
         canKick = false;
@@ -76,7 +78,13 @@ public class Player extends GameObject{
 
         // check collision
         fxy futurePos = pos.add(velocity);
-        // TODO actually do some collision checking
+        if(world.collisionPlayer(futurePos)){
+            // try moving half the distance
+            futurePos = pos.add(velocity.multiply(0.5f));
+            if(world.collisionPlayer(futurePos)){
+                futurePos = pos;
+            }
+        }
 
         // apply the new position
         pos = futurePos;
@@ -95,6 +103,10 @@ public class Player extends GameObject{
         this.name = name;
     }
 
+    public String getName(){
+        return name;
+    }
+
     public PlayerPojo getPojo(){
         PlayerPojo pojo = new PlayerPojo();
         fillGameObjectPojo(pojo);
@@ -109,9 +121,17 @@ public class Player extends GameObject{
         pojo.blastTime = blastTime;
         pojo.fuseTime = fuseTime;
         pojo.canKick = canKick;
+        pojo.style = style;
         return pojo;
     }
 
+    public boolean hurtable(){
+        return active;
+    }
+
+    public void hurt(){
+        active = false;
+    }
 
     public void onDelete() throws Exception {
         throw new Exception("no! a player object should never be deleted.");

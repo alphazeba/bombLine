@@ -3,5 +3,5 @@
 function updateFire(fire,pojo){
 	setx(fire,pojo.x);
 	sety(fire,pojo.y);
-	fire.blastSize = pojo.blastSize;
+	fire.explosion = pojo.exp;
 }
