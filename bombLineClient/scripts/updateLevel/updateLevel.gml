@@ -5,6 +5,7 @@ function updateLevel(level, pojo){
 	level.width = levelPojo.width;
 	level.height = levelPojo.height;
 	level.boxes = levelPojo.boxes;
+	// the spawnlocations are not sent during normal updates.
 	if(variable_struct_exists(levelPojo,"sl")){
 		level.spawnLocations = levelPojo.sl;
 	}
