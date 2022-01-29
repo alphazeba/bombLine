@@ -4,4 +4,5 @@ function initLevel(){
 	width = 1;
 	height = 1;
 	boxes = [0];
+	spawnLocations = [];
 }

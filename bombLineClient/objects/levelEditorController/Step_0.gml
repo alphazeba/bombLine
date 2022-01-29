@@ -2,6 +2,10 @@
 // You can write your code in this editor
 
 
+if( keyboard_check_pressed(ord("P"))){
+	room_goto(networkingTest)	
+}
+
 var keyFnMap = [
 	[vk_up, handleDecreaseHeight],
 	[vk_down, handleIncreaseHeight],

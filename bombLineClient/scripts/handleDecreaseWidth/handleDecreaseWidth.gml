@@ -23,4 +23,5 @@ function handleDecreaseWidth(){
 	
 	boxes = newData;
 	width = newWidth;
+	removeSpawnLocationsOutsideLevel()
 }

@@ -5,6 +5,7 @@ import com.arnhom.bombLine.Game.World;
 import com.arnhom.bombLine.Network.ConnectionMailer;
 import com.arnhom.bombLine.Network.ConnectionMessageHandler;
 import com.arnhom.bombLine.Network.TransferPOJO.Envelope;
+import com.arnhom.bombLine.Network.TransferPOJO.GameObjects.LevelPojo;
 import com.arnhom.bombLine.Network.TransferPOJO.Intent;
 import com.arnhom.bombLine.Network.TransferPOJO.MessagePojo;
 import com.arnhom.bombLine.Network.TransferPOJO.StatePojo;
@@ -26,6 +27,7 @@ public class PlayerHandler implements ConnectionMessageHandler {
     private static final String i_getPlayerId = "getPlayerId";
 
     private static final String i_resetWorld = "resetWorld";
+    private static final String i_uploadLevel = "uploadLevel";
 
     private static final String i_drip = "drip";
     private static final String o_drop = "drop";
@@ -84,6 +86,11 @@ public class PlayerHandler implements ConnectionMessageHandler {
             // fire on the screen, the fire do not
             // go away.  Could give fire a max
             // lifespan.
+        }
+        else if(message.is(i_uploadLevel)){
+            LevelPojo levelData = message.open(LevelPojo.class);
+            pushMessage(sealEnvelope(o_message,new MessagePojo("Server", "Player " + player.getName() + " has uploaded a level")));
+            world.setLevel(levelData);
         }
     }
 

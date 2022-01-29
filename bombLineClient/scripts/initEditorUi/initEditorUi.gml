@@ -18,14 +18,15 @@ function initEditorUi(){
 	initEditorButton(buffer,buttonHeight,ebw,ebh,spr_box,handleSelectBox);
 	initEditorButton(buffer*2+ebw,buttonHeight,ebw,ebh,spr_unbreakableBox,handleSelectUnbreakable);
 	initEditorButton(buffer*3+ebw*2,buttonHeight,ebw,ebh,spr_erase,handleSelectErase);
+	initEditorButton(buffer*4+ebw*3,buttonHeight,ebw,ebh,spr_spawnLocation, handleSelectSpawnLocation);
 	
 	
 	var buttonHeight2 = 300;
-	initEditorButton(buffer, buttonHeight2, ebw, ebh, spr_load, handleSelectBox);
-	initEditorButton(buffer*2+ebw, buttonHeight2, ebw,ebh, spr_save, handleSelectBox);
+	initEditorButton(buffer, buttonHeight2, ebw, ebh, spr_load, handleLoad);
+	initEditorButton(buffer*2+ebw, buttonHeight2, ebw,ebh, spr_save, handleSave);
 	
 	
-	editor_w = buffer*4+ebw*3;
+	editor_w = buffer*5+ebw*4;
 	editor_h = 400;
 	
 	editor_selected_y = buttonHeight + 2*buffer + ebh;

@@ -4,6 +4,13 @@ function stepEditorUi(){
 		
 	if(editor_draggable_clicked){
 		
+		if(mouse_x < 0 or mouse_y < 0 or mouse_x > room_width or mouse_y > room_height){
+			editor_draggable_clicked = false;
+			editor_ox = min(max(0,editor_ox), room_width-30);
+			editor_oy = min(max(0,editor_oy), room_height-30);
+			return;
+		}
+		
 		editor_ox = mouse_x + editor_draggable_mouseOffset_x;
 		editor_oy = mouse_y + editor_draggable_mouseOffset_y;
 		
@@ -45,8 +52,19 @@ function stepEditorUi(){
 		// if the cell is within the level set the box to the currently selected value
 		
 		if( cellx >= 0 and cellx < width and celly >= 0 and celly < height){
-			boxi = celly*width + cellx;
-			boxes[boxi] = editor_selected;
+			var boxi = celly*width + cellx;
+			if(editor_selected == -2){
+				// check if there is already a spawnLocation here.
+				if( not doesSpawnLocationExist(cellx,celly) and boxes[boxi] == 0 ){
+					addSpawnLocation(cellx,celly);
+				}
+			}
+			else {
+				boxes[boxi] = editor_selected;
+				if(doesSpawnLocationExist(cellx,celly)){
+					removeSpawnLocation(cellx,celly);
+				}
+			}
 		}
 		
 	}

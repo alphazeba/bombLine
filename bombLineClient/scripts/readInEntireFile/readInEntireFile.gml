@@ -1,9 +1,9 @@
 // Script assets have changed for v2.3.0 see
 // https://help.yoyogames.com/hc/en-us/articles/360005277377 for more information
-function readInEntireFile(fileName){
+function readInEntireFile(filter,fname){
 	
 	
-	var accessibleFileName = get_open_filename("*.json", fileName );
+	var accessibleFileName = get_open_filename(filter, fname );
 	
 	var file = file_text_open_read(accessibleFileName);
 	

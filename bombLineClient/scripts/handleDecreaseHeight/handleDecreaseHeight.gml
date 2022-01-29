@@ -23,4 +23,5 @@ function handleDecreaseHeight(){
 	
 	boxes = newData;
 	height = newHeight;
+	removeSpawnLocationsOutsideLevel()
 }

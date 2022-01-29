@@ -40,6 +40,9 @@ function drawEditorUi(ox,oy){
 	else if(editor_selected == 0){
 		selectedSprite = spr_erase;	
 	}
+	else if(editor_selected == -2){
+		selectedSprite = spr_spawnLocation;	
+	}
 	
 	draw_sprite_stretched(selectedSprite, 0, editor_selected_x+ox, editor_selected_y+oy, 128, 128);
 	

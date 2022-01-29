@@ -5,6 +5,8 @@ if(connectionState == "success"){
 	return;	
 }
 
+draw_set_color(c_green);
+
 draw_text(50,0, "connectionState: " + connectionState);
 
 if(connectionState == "enterConnectionInfo"){

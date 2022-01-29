@@ -32,11 +32,5 @@ function updateGameState(state){
 	}
 	
 	// update the level
-	var level = obj_level;
-	var levelPojo = state.level;
-	level.width = levelPojo.width;
-	level.height = levelPojo.height;
-	level.boxes = levelPojo.boxes;
-	
-	
+	updateLevel(obj_level, state.level);
 }

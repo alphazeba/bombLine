@@ -29,6 +29,11 @@ public class World {
         styles = new RangeDoler(4);
     }
 
+    public void setLevel(LevelPojo levelData){
+        originalLevelData = levelData;
+        reinitialize();
+    }
+
     public StatePojo reinitialize(){
         // send a message killing all of the objects
         Vector<String> deadIds = new Vector<>( objects.keySet() );

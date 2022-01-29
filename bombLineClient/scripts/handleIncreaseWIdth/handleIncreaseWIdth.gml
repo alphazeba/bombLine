@@ -2,6 +2,10 @@
 // https://help.yoyogames.com/hc/en-us/articles/360005277377 for more information
 function handleIncreaseWIdth(){
 	
+	if(width >= 21){
+		return;
+	}	
+	
 	var newData = [];
 	var newWidth = width+1;
 	
