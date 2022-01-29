@@ -2,6 +2,8 @@ package com.arnhom.bombLine.Game;
 
 import com.arnhom.bombLine.Game.Data.fxy;
 import com.arnhom.bombLine.Game.Data.ixy;
+import com.arnhom.bombLine.Game.SpecificObjects.Bomb;
+import com.arnhom.bombLine.Game.SpecificObjects.Player;
 import com.arnhom.bombLine.Game.WorldAssistance.RangeDoler;
 import com.arnhom.bombLine.Network.TransferPOJO.GameObjects.LevelPojo;
 import com.arnhom.bombLine.Network.TransferPOJO.StatePojo;
@@ -52,18 +54,72 @@ public class World {
         return deadState;
     }
 
-    public boolean collisionPlayer(fxy playerPosition){
-        return level.handlePlayerCollision(playerPosition);
+
+    public boolean playerCollision(Player player,fxy checkPos){
+        return gameObjectLevelCollision(checkPos, Player.collisionRadius) || playerBombCollision(player, checkPos);
+    }
+
+    public boolean bombBombCollision(fxy bombPos){
+        for(String key: objects.keySet()){
+            GameObject obj = objects.get(key);
+            if(obj.type.equals(Bomb.typeBomb)){
+                if(circleCollision(bombPos,Bomb.collisionRadius, obj.pos, Bomb.collisionRadius)){
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
+    private boolean gameObjectLevelCollision(fxy pos, float radius){
+        return level.handleGameObjectCollision(pos, radius);
     }
 
     public boolean fireLevelCollision(ixy firePosition){
         return level.handleFireCollision(firePosition);
     }
 
-    public void fireHurtCollision(ixy firePosition){
+    private boolean playerBombCollision(Player player, fxy playerPos){
+        for(String key: objects.keySet()){
+            GameObject obj = objects.get(key);
+            if( obj.type.equals(Bomb.typeBomb) ) {
+                Bomb bomb = (Bomb)obj;
+                if(bomb.canCollideWithPlayer(player)){
+                    if(testPlayerAgainstSpecificBombCollision(playerPos, obj.pos)){
+                        return true;
+                    }
+                }
+            }
+        }
+        return false;
+    }
+
+    public List<Player> getListOfPlayersTouchingBomb(fxy bombPos){
+        List<Player> touchingPlayers = new Vector<>();
         for(Player player: players){
-            if( player.hurtable() && player.getPos().snapToIxy().equals(firePosition)){
-                player.hurt();
+            if( testPlayerAgainstSpecificBombCollision(player.pos, bombPos) ){
+                touchingPlayers.add(player);
+            }
+        }
+        return touchingPlayers;
+    }
+
+    private boolean testPlayerAgainstSpecificBombCollision(fxy playerPos, fxy bombPos){
+        return circleCollision(playerPos,Player.collisionRadius,bombPos,Bomb.collisionRadius);
+    }
+
+    private boolean circleCollision(fxy posa, float radiusa, fxy posb, float radiusb){
+        float combinedRadius = radiusa+ radiusb;
+        float squareTouchingDistance = combinedRadius*combinedRadius;
+        fxy delta = posa.subtract(posb);
+        return delta.getSquareLength() < squareTouchingDistance;
+    }
+
+    public void fireHurtCollision(ixy firePosition){
+        for(String key: objects.keySet()){
+            GameObject obj = objects.get(key);
+            if(obj.hurtable() && obj.getPos().snapToIxy().equals(firePosition)){
+                obj.hurt();
             }
         }
     }
@@ -82,6 +138,7 @@ public class World {
         Vector<String> deadIds = new Vector<>();
         for(String key: keys){
             GameObject obj = objects.get(key);
+            obj.upkeep();
             state.add(obj.getPojo());
             if(obj.shouldBeRemoved()){
                 obj.onDelete();
@@ -114,12 +171,17 @@ public class World {
         return createNewPlayer(connectionId);
     }
 
-    public Player createNewPlayer(String connectionId){
+    private Player createNewPlayer(String connectionId){
         Player newPlayer = new Player(connectionId,styles.getNext());
         storeObject(newPlayer);
         players.add(newPlayer);
         level.placePlayer(newPlayer);
         return newPlayer;
+    }
+
+    public void removePlayer(Player player){
+        players.remove(player);
+        objects.remove(player.getId());
     }
 
     public void storeObject(GameObject obj){

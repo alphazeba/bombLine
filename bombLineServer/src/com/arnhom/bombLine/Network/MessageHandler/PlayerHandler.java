@@ -1,6 +1,6 @@
 package com.arnhom.bombLine.Network.MessageHandler;
 
-import com.arnhom.bombLine.Game.Player;
+import com.arnhom.bombLine.Game.SpecificObjects.Player;
 import com.arnhom.bombLine.Game.World;
 import com.arnhom.bombLine.Network.ConnectionMailer;
 import com.arnhom.bombLine.Network.ConnectionMessageHandler;
@@ -28,6 +28,8 @@ public class PlayerHandler implements ConnectionMessageHandler {
 
     private static final String i_resetWorld = "resetWorld";
     private static final String i_uploadLevel = "uploadLevel";
+
+    private static final String i_disconnect = "disconnect";
 
     private static final String i_drip = "drip";
     private static final String o_drop = "drop";
@@ -117,6 +119,10 @@ public class PlayerHandler implements ConnectionMessageHandler {
         else if(message.is(i_getPlayerId)){
             Envelope response = sealEnvelope(o_playerId, player.getId());
             pushMessage(response);
+        }
+        else if(message.is(i_disconnect)){
+            world.removePlayer(player);
+            player = null;
         }
     }
 

@@ -4,6 +4,7 @@ import com.arnhom.bombLine.Game.Data.Burn;
 import com.arnhom.bombLine.Game.Data.Grid;
 import com.arnhom.bombLine.Game.Data.fxy;
 import com.arnhom.bombLine.Game.Data.ixy;
+import com.arnhom.bombLine.Game.SpecificObjects.Player;
 import com.arnhom.bombLine.Game.WorldAssistance.RangeDoler;
 import com.arnhom.bombLine.Network.TransferPOJO.GameObjects.LevelPojo;
 
@@ -30,37 +31,37 @@ public class Level {
         loadLevel(levelData);
     }
 
-    public boolean handlePlayerCollision(fxy playerPos){
-        fxy playerSnapped = playerPos.snap();
-        ixy playerBox = playerSnapped.snapToIxy();
-        if(playerCollidableHere(playerBox)){
+    public boolean handleGameObjectCollision(fxy pos, float radius){
+        fxy snappedPos = pos.snap();
+        ixy posCell = snappedPos.snapToIxy();
+        if(playerCollidableHere(posCell)){
             return true;
         }
 
-        fxy delta = playerPos.subtract(playerSnapped);
-        float radius = 0.15f;
+        fxy delta = pos.subtract(snappedPos);
         // check radius of edges
         if(delta.x < radius){ // left
-            if(playerCollidableHere(playerBox.add(-1,0))){
+            if(playerCollidableHere(posCell.add(-1,0))){
                 return true;
             }
         }
         if(delta.x > 1.f-radius){ // right
-            if(playerCollidableHere(playerBox.add(1,0))){
+            if(playerCollidableHere(posCell.add(1,0))){
                 return true;
             }
         }
         if(delta.y < radius){ // above
-            if(playerCollidableHere(playerBox.add(0,-1))){
+            if(playerCollidableHere(posCell.add(0,-1))){
                 return true;
             }
         }
         if(delta.y > 1.f-radius){ // below
-            if(playerCollidableHere(playerBox.add(0,1))){
+            if(playerCollidableHere(posCell.add(0,1))){
                 return true;
             }
         }
         // TODO handle the corners.
+        // Though so far this hasn't been noticeable.
         return false;
     }
 
@@ -102,6 +103,7 @@ public class Level {
         pojo.boxes = boxes.getData();
         return pojo;
     }
+
     public void loadLevel(LevelPojo pojo){
         boxes = new Grid<>(pojo.width,pojo.height,0);
         boxes.setData(pojo.boxes.clone());

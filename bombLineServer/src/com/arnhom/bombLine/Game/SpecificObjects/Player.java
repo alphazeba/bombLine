@@ -1,10 +1,11 @@
-package com.arnhom.bombLine.Game;
+package com.arnhom.bombLine.Game.SpecificObjects;
 
 import com.arnhom.bombLine.Game.Data.fxy;
+import com.arnhom.bombLine.Game.GameObject;
 import com.arnhom.bombLine.Network.TransferPOJO.GameObjects.PlayerPojo;
 import com.arnhom.bombLine.Utility.Guid;
 
-public class Player extends GameObject{
+public class Player extends GameObject {
     private String name;
     private int style;
 
@@ -24,10 +25,13 @@ public class Player extends GameObject{
 
     private int numBombsActive;
 
+    public static final String typePlayer = "player";
+    public static final float collisionRadius = 0.15f;
+
     public Player(String connectionId, int style){
         super();
         name = generateDefaultName();
-        type = "player";
+        type = typePlayer;
         this.style = style;
         this.connectionId = connectionId;
         initialize();
@@ -53,7 +57,7 @@ public class Player extends GameObject{
         bombIntent = false;
 
         speed = 0.1f;
-        maxBomb = 1;
+        maxBomb = 2; // TODO return this value to 1 for usual.
         blastSize = 2;
         blastTime = 30;
         fuseTime = 2*60;
@@ -78,10 +82,10 @@ public class Player extends GameObject{
 
         // check collision
         fxy futurePos = pos.add(velocity);
-        if(world.collisionPlayer(futurePos)){
+        if(world.playerCollision(this,futurePos)){
             // try moving half the distance
             futurePos = pos.add(velocity.multiply(0.5f));
-            if(world.collisionPlayer(futurePos)){
+            if(world.playerCollision(this,futurePos)){
                 futurePos = pos;
             }
         }
@@ -91,7 +95,7 @@ public class Player extends GameObject{
 
     }
 
-    public void notifyOfOwnedBombsExplosion(){
+    public void notifyOfOwnedBombsDeletion(){
         numBombsActive = Math.max(0, numBombsActive-1);
     }
 

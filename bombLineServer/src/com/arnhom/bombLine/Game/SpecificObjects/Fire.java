@@ -1,31 +1,33 @@
-package com.arnhom.bombLine.Game;
+package com.arnhom.bombLine.Game.SpecificObjects;
 
 import com.arnhom.bombLine.Game.Data.fxy;
 import com.arnhom.bombLine.Game.Data.ixy;
+import com.arnhom.bombLine.Game.GameObject;
 import com.arnhom.bombLine.Network.TransferPOJO.GameObjects.FirePojo;
 
-public class Fire extends GameObject{
+public class Fire extends GameObject {
     int blastSize;
     int blastTime;
     int[] explosion;
-    boolean firstUpdate;
+
+
+    public static final String typeFire = "fire";
 
     public Fire(fxy pos, int blastSize,int blastTime){
         super();
-        this.type = "fire";
+        this.type = typeFire;
         this.pos = pos.snap();
         this.blastSize = blastSize;
         this.blastTime = blastTime;
-        this.firstUpdate = true;
+    }
+
+    @Override
+    public void onSpawn(){
+        doExplosion();
     }
 
     @Override
     public void update() {
-
-        if(firstUpdate){
-            firstUpdate = false;
-            doExplosion();
-        }
         doFireHurt();
 
         blastTime--;

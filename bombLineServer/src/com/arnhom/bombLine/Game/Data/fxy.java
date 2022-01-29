@@ -21,6 +21,10 @@ public class fxy {
         return new fxy(x-other.x, y-other.y);
     }
 
+    public float getSquareLength(){
+        return x*x + y*y;
+    }
+
     public fxy snap() {
         return new fxy((float)Math.floor(x), (float)Math.floor(y));
     }

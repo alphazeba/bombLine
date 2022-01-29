@@ -1,6 +1,7 @@
 package com.arnhom.bombLine.Game;
 
 import com.arnhom.bombLine.Game.Data.fxy;
+import com.arnhom.bombLine.Game.SpecificObjects.Player;
 import com.arnhom.bombLine.Network.TransferPOJO.GameObjects.GameObjectPojo;
 import com.arnhom.bombLine.Utility.Guid;
 
@@ -47,7 +48,19 @@ public abstract class GameObject {
         return pos;
     }
 
+    public void onSpawn(){
+
+    }
+
     public abstract void update();
+
+    public void upkeep(){
+
+    }
+
+    public void onDelete() throws Exception {
+
+    }
 
     public void fillGameObjectPojo(GameObjectPojo pojo){
         pojo.oid = id;
@@ -59,12 +72,9 @@ public abstract class GameObject {
 
     public abstract Object getPojo();
 
-    public void onDelete() throws Exception {
-
-    }
-
     public void setObjectCreator(World world){
         this.world = world;
+        onSpawn();
     }
 
     public void storeObject(GameObject obj){
@@ -73,5 +83,13 @@ public abstract class GameObject {
 
     public void deleteObject(){
         this.removeObject = true;
+    }
+
+    public boolean hurtable(){
+        return active;
+    }
+
+    public void hurt(){
+
     }
 }
